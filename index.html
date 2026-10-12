@@ -453,6 +453,15 @@ function roll() {
   save();
 }
 
+try {
+  if (!sessionStorage.getItem("household-visit")) {
+    sessionStorage.setItem("household-visit", "1");
+    new Image().src = "https://abacus.jasoncameron.dev/hit/simsimlab/household";
+  }
+} catch (err) {
+  new Image().src = "https://abacus.jasoncameron.dev/hit/simsimlab/household";
+}
+
 document.getElementById("rebirthBtn").addEventListener("click", roll);
 document.getElementById("copyBtn").addEventListener("click", async () => {
   const button = document.getElementById("copyBtn");
