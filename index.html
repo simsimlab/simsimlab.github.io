@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>어느 집안에 태어날까</title>
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: #f6f7f9;
+    color: #191f28;
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 28px 20px 56px;
+  }
+
+  .mast {
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e5e8eb;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: 0;
+  }
+
+  .subtitle {
+    margin: 8px 0 0;
+    max-width: 36em;
+    color: #4e5968;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  #rebirthBtn {
+    display: inline-block;
+    margin-top: 16px;
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 18px;
+    background: #3182f6;
+    color: #fff;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+    cursor: pointer;
+  }
+
+  #rebirthBtn:hover { background: #1b64da; }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  #mapBox {
+    background: #eef2f6;
+    overflow: hidden;
+  }
+
+  #koreaMap {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .province {
+    fill: #ffffff;
+    stroke: #667085;
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+
+  .province.selected {
+    fill: #3182f6;
+    stroke: #1849a0;
+    stroke-width: 2.6;
+  }
+
+  .sheet {
+    background: #ffffff;
+    border: 1px solid #e5e8eb;
+    padding: 22px 22px 18px;
+    min-height: 100%;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e5e8eb;
+  }
+
+  .label {
+    font-size: 13px;
+    letter-spacing: 0;
+    color: #4e5968;
+    margin-bottom: 4px;
+  }
+
+  .value {
+    font-size: 22px;
+    font-weight: 800;
+    word-break: keep-all;
+  }
+
+  #result { display: none; }
+
+  .lead {
+    margin: 0 0 14px;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  #result strong {
+    font-size: 22px;
+    font-weight: 800;
+    color: #191f28;
+  }
+
+  .waiting {
+    margin: 0;
+    color: #4e5968;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .history {
+    margin: 18px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid #e5e8eb;
+  }
+
+  .history h2 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #8b95a1;
+  }
+
+  .history ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .history li {
+    padding: 7px 0;
+    border-top: 1px solid #f2f4f6;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .history li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .past {
+    display: grid;
+    grid-template-columns: 2.6em 3.4em 1fr;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .past .where,
+  .past .spoon {
+    font-weight: 700;
+    color: #191f28;
+  }
+
+  .past .asset { color: #4e5968; }
+
+  .plainPast { color: #4e5968; }
+
+  .foot { margin-top: 22px; }
+
+  .sources {
+    color: #4e5968;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .sources summary {
+    cursor: pointer;
+    width: fit-content;
+    color: #8b95a1;
+    font-weight: 700;
+  }
+
+  .sourceList {
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sourceList li { padding: 3px 0; }
+
+  .sources p { margin: 10px 0 0; }
+
+  .sources a {
+    color: #1b64da;
+    margin-right: 14px;
+  }
+
+  .copyBtn {
+    margin-top: 8px;
+    border: 1px solid #d1d6db;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: #fff;
+    color: #191f28;
+    font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 800px) {
+    h1 { font-size: 32px; }
+    .stage { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <h1>어느 집안에 태어날까</h1>
+      <p class="subtitle">지역, 부모님 순자산, 수저를 한 번에 뽑습니다. 전국 가구 평균 순자산은 4억 7,144만 원입니다.</p>
+      <button id="rebirthBtn" type="button">집안 뽑기</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <div id="mapBox">
+      <svg id="koreaMap" viewBox="0 0 640 760" role="img" aria-label="대한민국 시도 지도"></svg>
+    </div>
+
+    <section class="sheet">
+      <div class="stats">
+        <div>
+          <div class="label">지역과 수저</div>
+          <div class="value" id="resultSpoon">아직 없음</div>
+        </div>
+        <div>
+          <div class="label">이 지역 가구 비중</div>
+          <div class="value" id="resultChance">—</div>
+        </div>
+        <div>
+          <div class="label">뽑은 횟수</div>
+          <div class="value" id="rollCount">0</div>
+        </div>
+      </div>
+
+      <p class="waiting" id="waiting">버튼을 누르면 지도에 지역이 칠해집니다.</p>
+      <div id="result">
+        <p class="lead">당신은 <strong id="bornRegion"></strong>에서 태어났습니다.</p>
+        <p class="lead">부모님 순자산은 <strong id="bornAsset"></strong>입니다.</p>
+        <p class="lead"><strong id="bornSpoon"></strong>로 태어났습니다.</p>
+        <button id="copyBtn" class="copyBtn" type="button">이 결과 복사</button>
+      </div>
+      <div class="history" id="history" hidden></div>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <details class="sources">
+      <summary>출처와 계산</summary>
+      <ul class="sourceList">
+        <li>자산은 2025년 가계금융복지조사, 2025년 3월 31일 기준입니다.</li>
+        <li>순자산은 집, 전세보증금, 예금, 주식에서 빚을 뺀 가구 금액입니다.</li>
+        <li>지역은 2024년 가구 22,997,120으로 뽑고, 자산 분위는 전국 기준 각 10%입니다.</li>
+        <li>수저는 1–4분위 흙, 5–7 동, 8–9 은, 10 금입니다. 이 페이지가 붙인 이름입니다.</li>
+        <li>1분위 평균은 -771만 원, 10분위 평균은 21억 7,122만 원입니다.</li>
+        <li>지도 경계는 통계청 2018년 시도 경계입니다.</li>
+      </ul>
+      <p>
+        <a href="https://mods.go.kr/board.es?act=view&bid=215&list_no=439535&mid=a10301040300" target="_blank" rel="noopener noreferrer">조사 보도자료</a>
+        <a href="https://beezbook.com/net-worth-rank" target="_blank" rel="noopener noreferrer">분위 경계값</a>
+        <a href="https://census.go.kr/sub/ehpp/bc/ehppbc100t01" target="_blank" rel="noopener noreferrer">2024년 시도별 가구</a>
+      </p>
+    </details>
+  </footer>
+</div>
+
+<script src="korea-map.js"></script>
+<script>
+const BANDS = [
+  { spoon: "금수저", min: 110020, max: null },
+  { spoon: "은수저", min: 69380, max: 110020 },
+  { spoon: "은수저", min: 46180, max: 69380 },
+  { spoon: "동수저", min: 33050, max: 46180 },
+  { spoon: "동수저", min: 23860, max: 33050 },
+  { spoon: "동수저", min: 16472, max: 23860 },
+  { spoon: "흙수저", min: 10296, max: 16472 },
+  { spoon: "흙수저", min: 5108, max: 10296 },
+  { spoon: "흙수저", min: 1210, max: 5108 },
+  { spoon: "흙수저", min: null, max: 1210 }
+];
+
+const STORE = "household-rebirth-v1";
+
+function formatMan(man) {
+  const sign = man < 0 ? "-" : "";
+  const abs = Math.abs(man);
+  const eok = Math.floor(abs / 10000);
+  const rest = abs % 10000;
+  const restText = rest.toLocaleString("ko-KR");
+  if (eok === 0) return sign + restText + "만\u00A0원";
+  if (rest === 0) return sign + eok + "억\u00A0원";
+  return sign + eok + "억\u00A0" + restText + "만\u00A0원";
+}
+
+function rangeText(band) {
+  if (band.min == null) return formatMan(band.max) + " 미만";
+  if (band.max == null) return formatMan(band.min) + " 이상";
+  return formatMan(band.min) + " 이상, " + formatMan(band.max) + " 미만";
+}
+
+const map = document.getElementById("koreaMap");
+PROVINCES.forEach((province) => {
+  const shape = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  shape.setAttribute("d", province.d);
+  shape.setAttribute("class", "province");
+  shape.dataset.code = province.code;
+  map.appendChild(shape);
+});
+
+function pickProvince() {
+  let ticket = Math.random() * HOUSEHOLDS;
+  for (const province of PROVINCES) {
+    ticket -= province.households;
+    if (ticket < 0) return province;
+  }
+  return PROVINCES[PROVINCES.length - 1];
+}
+
+function regionChance(province) {
+  return (province.households / HOUSEHOLDS * 100).toFixed(1) + "%";
+}
+
+let rolls = 0;
+let history = [];
+let lastShare = "";
+
+try {
+  const saved = JSON.parse(localStorage.getItem(STORE) || "null");
+  if (saved && Array.isArray(saved.history)) {
+    rolls = saved.rolls || 0;
+    history = saved.history.slice(0, 12);
+    document.getElementById("rollCount").textContent = String(rolls);
+    paintHistory(false);
+  }
+} catch (err) {
+  rolls = 0;
+  history = [];
+}
+
+function paintHistory(skipLatest) {
+  const box = document.getElementById("history");
+  const past = (skipLatest ? history.slice(1) : history)
+    .filter((item) => item.split(" · ").length >= 3)
+    .slice(0, 5);
+  box.replaceChildren();
+  if (!past.length) {
+    box.hidden = true;
+    return;
+  }
+  box.hidden = false;
+  const title = document.createElement("h2");
+  title.textContent = "이전 결과";
+  const list = document.createElement("ul");
+  past.forEach((item) => {
+    const li = document.createElement("li");
+    const parts = item.split(" · ");
+    if (parts.length >= 3) {
+      const row = document.createElement("div");
+      row.className = "past";
+      const where = document.createElement("span");
+      where.className = "where";
+      where.textContent = parts[0];
+      const spoon = document.createElement("span");
+      spoon.className = "spoon";
+      spoon.textContent = parts[1];
+      const asset = document.createElement("span");
+      asset.className = "asset";
+      asset.textContent = parts.slice(2).join(" · ")
+        .replace(/ /g, "\u00A0")
+        .replace(/\u00A0(이상|미만)/g, " $1")
+        .replace(/,\u00A0/g, ", ");
+      row.append(where, spoon, asset);
+      li.appendChild(row);
+    } else {
+      li.className = "plainPast";
+      li.textContent = item;
+    }
+    list.appendChild(li);
+  });
+  box.append(title, list);
+}
+
+function save() {
+  localStorage.setItem(STORE, JSON.stringify({ rolls, history: history.slice(0, 12) }));
+}
+
+function roll() {
+  const band = BANDS[Math.floor(Math.random() * BANDS.length)];
+  const province = pickProvince();
+  const chance = regionChance(province);
+  const asset = rangeText(band);
+  const life = province.name + " · " + band.spoon + " · " + asset;
+  rolls += 1;
+  document.getElementById("rollCount").textContent = String(rolls);
+  document.getElementById("resultSpoon").textContent = province.name + " " + band.spoon;
+  document.getElementById("resultChance").textContent = chance;
+  document.getElementById("bornRegion").textContent = province.name;
+  document.getElementById("bornAsset").textContent = asset;
+  document.getElementById("bornSpoon").textContent = band.spoon;
+
+  document.querySelectorAll(".province").forEach((shape) => {
+    shape.classList.toggle("selected", shape.dataset.code === province.code);
+  });
+
+  document.getElementById("waiting").style.display = "none";
+  document.getElementById("result").style.display = "block";
+
+  history.unshift(life);
+  history = history.slice(0, 12);
+  paintHistory(true);
+
+  lastShare = [
+    province.name + "에서 태어났습니다.",
+    "부모님 순자산은 " + asset + "입니다.",
+    band.spoon + "로 태어났습니다."
+  ].join("\n");
+  save();
+}
+
+document.getElementById("rebirthBtn").addEventListener("click", roll);
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  const button = document.getElementById("copyBtn");
+  try {
+    await navigator.clipboard.writeText(lastShare);
+    button.textContent = "복사했습니다";
+  } catch (err) {
+    button.textContent = "복사를 못 했습니다";
+  }
+  setTimeout(() => {
+    button.textContent = "결과 복사";
+  }, 1200);
+});
+</script>
+</body>
+</html>
