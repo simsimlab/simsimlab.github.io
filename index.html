@@ -17,7 +17,7 @@
   }
 
   .wrap {
-    max-width: 1080px;
+    max-width: 1220px;
     margin: 0 auto;
     padding: 28px 20px 56px;
   }
@@ -62,7 +62,7 @@
 
   .stage {
     display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-columns: 120px 1.05fr 0.95fr;
     gap: 18px;
     align-items: start;
   }
@@ -231,14 +231,13 @@
     cursor: pointer;
   }
 
-  .partner { margin-top: 28px; }
+  .partner { margin: 0; }
 
   .partner p {
-    margin: 0 0 10px;
-    max-width: 36em;
+    margin: 0 0 8px;
     color: #4e5968;
-    font-size: 13px;
-    line-height: 1.55;
+    font-size: 12px;
+    line-height: 1.45;
   }
 
   .partner iframe {
@@ -264,6 +263,11 @@
   </header>
 
   <div class="stage">
+    <aside class="partner">
+      <p>이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+      <iframe src="https://coupa.ng/cp565b" width="120" height="240" frameborder="0" scrolling="no" referrerpolicy="unsafe-url" title="쿠팡 상품"></iframe>
+    </aside>
+
     <div id="mapBox">
       <svg id="koreaMap" viewBox="0 0 640 760" role="img" aria-label="대한민국 시도 지도"></svg>
     </div>
@@ -313,11 +317,6 @@
       </p>
     </details>
   </footer>
-
-  <aside class="partner">
-    <p>이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
-    <iframe src="https://coupa.ng/cp565b" width="120" height="240" frameborder="0" scrolling="no" referrerpolicy="unsafe-url" title="쿠팡 상품"></iframe>
-  </aside>
 </div>
 
 <script src="korea-map.js"></script>
