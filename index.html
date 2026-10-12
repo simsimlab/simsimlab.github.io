@@ -455,12 +455,13 @@ function roll() {
 
 try {
   if (!sessionStorage.getItem("household-visit")) {
-    sessionStorage.setItem("household-visit", "1");
-    new Image().src = "https://abacus.jasoncameron.dev/hit/simsimlab/household";
+    fetch("https://abacus.jasoncameron.dev/hit/simsimlab/household", { mode: "no-cors", cache: "no-store" })
+      .then(function () {
+        try { sessionStorage.setItem("household-visit", "1"); } catch (err) {}
+      })
+      .catch(function () {});
   }
-} catch (err) {
-  new Image().src = "https://abacus.jasoncameron.dev/hit/simsimlab/household";
-}
+} catch (err) {}
 
 document.getElementById("rebirthBtn").addEventListener("click", roll);
 document.getElementById("copyBtn").addEventListener("click", async () => {
