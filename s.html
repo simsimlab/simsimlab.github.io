@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>방문</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: #f6f7f9;
+    color: #191f28;
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  }
+
+  .card { text-align: center; }
+
+  .label {
+    color: #8b95a1;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .value {
+    margin: 8px 0 0;
+    font-size: 72px;
+    font-weight: 800;
+  }
+
+  .when {
+    margin: 12px 0 0;
+    color: #8b95a1;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="label">누적 방문</div>
+    <p class="value" id="value">…</p>
+    <p class="when" id="when"></p>
+  </main>
+  <script>
+    const view = document.getElementById("value");
+    const when = document.getElementById("when");
+
+    function load() {
+      fetch("https://abacus.jasoncameron.dev/get/simsimlab/household", { cache: "no-store" })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          view.textContent = Number(data.value).toLocaleString("ko-KR");
+          when.textContent = new Date().toLocaleTimeString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          });
+        })
+        .catch(function () {
+          view.textContent = "—";
+          when.textContent = "숫자를 가져오지 못했습니다";
+        });
+    }
+
+    load();
+    setInterval(load, 15000);
+  </script>
+</body>
+</html>
