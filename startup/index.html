@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230b6e67'/%3E%3C/svg%3E">
+<title>주식회사 — 연구·문화로 키우는 회사</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+  <div class="app">
+    <header class="top">
+      <div class="brand-block">
+        <p class="brand">주식회사</p>
+        <p class="tagline" id="tagline">사원 1명으로 시작 · 연구와 문화로 키운다</p>
+      </div>
+      <div class="resources" id="resources"></div>
+      <div class="top-actions">
+        <button type="button" class="ghost" id="btn-save">저장</button>
+        <button type="button" class="ghost" id="btn-reset">초기화</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="floor" aria-labelledby="floor-title">
+        <div class="section-head">
+          <h2 id="floor-title">오피스</h2>
+          <p class="hint" id="headcount"></p>
+        </div>
+        <div class="employee-grid" id="employees"></div>
+        <div class="floor-actions">
+          <button type="button" class="cta" id="btn-hire">채용하기</button>
+          <p class="hint" id="hire-hint"></p>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <nav class="tabs" role="tablist">
+          <button type="button" class="tab on" data-tab="research" role="tab">연구 테크</button>
+          <button type="button" class="tab" data-tab="culture" role="tab">문화 테크</button>
+          <button type="button" class="tab" data-tab="office" role="tab">사무용품</button>
+          <button type="button" class="tab" data-tab="train" role="tab">교육</button>
+        </nav>
+        <div class="tab-body" id="tab-body"></div>
+      </aside>
+    </main>
+
+    <footer class="log-bar">
+      <div class="surge-meter" id="surge-meter" aria-hidden="true"><i></i></div>
+      <p id="log">회사를 열었습니다. 첫 사원이 책상에 앉았습니다.</p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/logic.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
